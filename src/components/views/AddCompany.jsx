@@ -84,10 +84,10 @@ const AddCompany = () => {
                     <div className="relative">
                       <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
                         <option>Choose</option>
-                        <option>Eastern Time (ET)</option>
-                        <option>Central Time (CT)</option>
-                        <option>Mountain Time (MT)</option>
-                        <option>Pacific Time (PT)</option>
+                        <option>CST</option>
+                        <option>EST</option>
+                        <option>MST</option>
+                        <option>PST</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -116,18 +116,60 @@ const AddCompany = () => {
                   />
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input 
-                      type="text" 
-                      placeholder="City" 
-                      className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
-                    />
+                    
                     
                     <div className="relative">
                       <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Select</option>
+                        <option>City</option>
                         <option>Alabama</option>
                         <option>Alaska</option>
                         <option>Arizona</option>
+                        <option>Arkansas</option>
+                        <option>California</option>
+                        <option>Connecticut</option>
+                        <option>Delaware</option>
+                        <option>Florida</option>
+                        <option>Georgia</option>
+                        <option>Hawaii</option>
+                        <option>Idhao</option>
+                        <option>Illinios</option>
+                        <option>Indiana</option>
+                        <option>Iowa</option>
+                        <option>Kensas</option>
+                        <option>Kentucky</option>
+                        <option>Louisiana</option>
+                        <option>Maine</option>
+                        <option>Maryland</option>
+                        <option>Masschusetts</option>
+                        <option>Michigan</option>
+                        <option>Minnesota</option>
+                        <option>Mississippi</option>
+                        <option>Montana</option>
+                        <option>Nebraska</option>
+                        <option>Nevada</option>
+                        <option>New Hamsphire</option>
+                        <option>New Jersey</option>
+                        <option>New Mexico</option>
+                        <option>New York</option>
+                        <option>North Carolina</option>
+                        <option>North Carolina</option>
+                        <option>North Dakota</option>
+                        <option>Ohio</option>
+                        <option>Pkhlahoma</option>
+                        <option>Oregon</option>
+                        <option>Pennsylevenia</option>
+                        <option>Rhode Island</option>
+                        <option>South Carolina</option>
+                        <option>South Dakota</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Utha</option>
+                        <option>Vermont</option>
+                        <option>Virginia</option>
+                        <option>Washington</option>
+                        <option>West Virginia</option>
+                        <option>Wisconsin</option>
+                        <option>Wyoming</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -175,10 +217,10 @@ const AddCompany = () => {
                   <div className="relative">
                     <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
                       <option>Choose</option>
-                      <option>Eastern Time (ET)</option>
-                      <option>Central Time (CT)</option>
-                      <option>Mountain Time (MT)</option>
-                      <option>Pacific Time (PT)</option>
+                        <option>CST</option>
+                        <option>EST</option>
+                        <option>MST</option>
+                        <option>PST</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -196,18 +238,61 @@ const AddCompany = () => {
                   />
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <input 
-                      type="text" 
-                      placeholder="City" 
-                      className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
-                    />
+                    
                     
                     <div className="relative">
                       <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Select</option>
+                         <option>City</option>
                         <option>Alabama</option>
                         <option>Alaska</option>
                         <option>Arizona</option>
+                        <option>Arkansas</option>
+                        <option>California</option>
+                        <option>Connecticut</option>
+                        <option>Delaware</option>
+                        <option>Florida</option>
+                        <option>Georgia</option>
+                        <option>Hawaii</option>
+                        <option>Idhao</option>
+                        <option>Illinios</option>
+                        <option>Indiana</option>
+                        <option>Iowa</option>
+                        <option>Kensas</option>
+                        <option>Kentucky</option>
+                        <option>Louisiana</option>
+                        <option>Maine</option>
+                        <option>Maryland</option>
+                        <option>Masschusetts</option>
+                        <option>Michigan</option>
+                        <option>Minnesota</option>
+                        <option>Mississippi</option>
+                        <option>Montana</option>
+                        <option>Nebraska</option>
+                        <option>Nevada</option>
+                        <option>New Hamsphire</option>
+                        <option>New Jersey</option>
+                        <option>New Mexico</option>
+                        <option>New York</option>
+                        <option>North Carolina</option>
+                        <option>North Carolina</option>
+                        <option>North Dakota</option>
+                        <option>Ohio</option>
+                        <option>Pkhlahoma</option>
+                        <option>Oregon</option>
+                        <option>Pennsylevenia</option>
+                        <option>Rhode Island</option>
+                        <option>South Carolina</option>
+                        <option>South Dakota</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Utha</option>
+                        <option>Vermont</option>
+                        <option>Virginia</option>
+                        <option>Washington</option>
+                        <option>West Virginia</option>
+                        <option>Wisconsin</option>
+                        <option>Wyoming</option>
+                      
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -247,8 +332,7 @@ const AddCompany = () => {
                   <div className="relative">
                     <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
                       <option>ELD</option>
-                      <option>AOBRD</option>
-                      <option>None</option>
+                      
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -274,11 +358,10 @@ const AddCompany = () => {
                     <div className="relative">
                       <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
                         <option>Choose</option>
-                        <option>US Property 70hr/8days</option>
-                        <option>US Property 60hr/7days</option>
-                        <option>US Passenger 60hr/7days</option>
-                        <option>Canada Cycle 1</option>
-                        <option>Canada Cycle 2</option>
+                        <option>USA 70hr/8days</option>
+                        <option>USA 60hr/7days</option>
+                        <option>California 80hr/8days</option>
+                        
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -294,7 +377,7 @@ const AddCompany = () => {
                         <option>Choose</option>
                         <option>Property</option>
                         <option>Passenger</option>
-                        <option>Oil Field</option>
+                        <option>Oil & Gas</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -324,8 +407,8 @@ const AddCompany = () => {
                     <div className="relative">
                       <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
                         <option>No Rest Break Required</option>
-                        <option>Property 30 Minutes</option>
-                        <option>Passenger 8 Hours</option>
+                        <option>30 Minute Rest Break Required</option>
+                        
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />

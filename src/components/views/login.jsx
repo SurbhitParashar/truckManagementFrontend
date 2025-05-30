@@ -12,21 +12,23 @@ const Login = () => {
   const togglePasswordVisibility = () => setShowPassword(prev => !prev);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/api/user/login', {
-        username,
-        password,
-      });
+  e.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:5000/api/user/login', {
+      username,
+      password,
+    }, {
+      withCredentials: true
+    });
 
-      if (response.status === 200) {
-        navigate('/ManageCompany');
-      }
-    } catch (error) {
-      
-      alert('Invalid credentials');
+    if (response.status === 200) {
+      navigate('/ManageCompany');
     }
-  };
+  } catch (error) {
+    alert('Invalid credentials');
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-100 p-4">

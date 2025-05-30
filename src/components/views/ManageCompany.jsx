@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Copy, FileText, File, Printer, Settings, Search } from 'lucide-react';
+import { fetchUserFromCookie } from '../../utils/auth';
 
 const ManageCompany = () => {
   const navigate = useNavigate();
+  const [user,setUser]=useState(null);
+
+  useEffect(() => {
+    fetchUserFromCookie().then(setUser);
+  }, []);
 
   // Sample data
   const companies = [
@@ -25,8 +31,10 @@ const ManageCompany = () => {
               <a href="/ManageCompany" className="text-gray-700 hover:text-blue-600">Home</a>
               <a href="#" className="text-gray-700 hover:text-blue-600">Refresh</a>
               <div className="flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white">J</div>
-                <span className="text-gray-700">johnpriest@xpertlogs</span>
+                {/* <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white">J</div> */}
+                
+            <span className="text-gray-700 border border-gray-300 rounded px-2 py-1">{user?.username || "Loading..."}</span>
+            
                 <ChevronDown className="h-5 w-5 text-gray-500" />
               </div>
             </div>
