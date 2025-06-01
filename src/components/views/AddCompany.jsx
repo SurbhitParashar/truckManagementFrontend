@@ -1,9 +1,77 @@
-import React from 'react';
-import { Truck, ChevronDown, Home, RotateCcw, Mail } from 'lucide-react';
-
+import React, { useState } from 'react';
+import { ChevronDown, Home, RotateCcw, Mail } from 'lucide-react';
 import Head from 'next/head';
 
 const AddCompany = () => {
+  // 1. Initialize form state
+  const [form, setForm] = useState({
+    // General Settings
+    name: '',
+    dotNumber: '',
+    timeZone: '',
+    periodStart: '00:00',
+    address: '',
+    city: '',
+    state: '',
+    country: '',
+    zipCode: '',
+
+    // Terminal 1
+    exemptDriver: false,
+    terminalTimeZone: '',
+    terminalAddress: '',
+    terminalCity: '',
+    terminalState: '',
+    terminalCountry: '',
+    terminalZipCode: '',
+
+    // Compliance Settings
+    complianceMode: '',
+    hosRules: '',
+    cargoType: '',
+    restartOption: '',
+    restBreakRequirement: '',
+    shortHaulException: false,
+    allowPersonalUse: true,
+    allowYardMoves: true,
+    allowSplitSleep: false,
+
+    // Plan Features
+    allowTracking: false,
+    allowGpsTracking: false,
+    allowIfta: false,
+  });
+
+  // 2. Generic onChange for inputs, selects, checkboxes
+  const handleChange = (e) => {
+    const { name, type, value, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  // 3. Submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/addcompany', {
+        method: 'POST',
+        credentials: 'include',               // send JWT cookie
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Submission failed');
+      alert('Company created successfully!');
+      // Optionally reset form here:
+      // setForm(/* initial state object as above */);
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -16,13 +84,10 @@ const AddCompany = () => {
         <header className="bg-gradient-to-r from-blue-700 to-blue-800 text-white p-4 flex justify-between items-center shadow-md">
           <div className="flex space-x-6">
             <a href="/ManageCompany" className="hover:text-blue-300 flex items-center">
-              <Home className="h-5 w-5 mr-1" />
-              Home
+              <Home className="h-5 w-5 mr-1" /> Home
             </a>
             <a href="#" className="hover:text-blue-300 flex items-center">
-              <RotateCcw className="h-5 w-5 mr-1" />
-
-              Refresh
+              <RotateCcw className="h-5 w-5 mr-1" /> Refresh
             </a>
           </div>
           <div className="flex items-center space-x-2">
@@ -34,7 +99,6 @@ const AddCompany = () => {
 
         {/* Main Content */}
         <main className="container mx-auto px-4 py-6">
-          {/* Page Title */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold text-blue-900">Company Form</h1>
             <div className="text-blue-600 flex items-center">
@@ -44,26 +108,23 @@ const AddCompany = () => {
             </div>
           </div>
 
-          {/* Form Sections */}
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* General Settings */}
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-blue-200">
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
                 <h2 className="font-medium text-lg text-white">General Settings</h2>
               </div>
-              <div className="p-6">
-                <div className="flex items-center mb-6">
-                  <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-medium">1</div>
-                  <h3 className="text-lg font-medium text-blue-800">Add Company</h3>
-                </div>
-
+              <div className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Company Name */}
+                  {/* Name */}
                   <div>
                     <label className="block mb-2 font-medium text-blue-800">Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Enter Company Name" 
+                    <input
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Enter Company Name"
                       className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
                     />
                   </div>
@@ -71,9 +132,12 @@ const AddCompany = () => {
                   {/* DOT Number */}
                   <div>
                     <label className="block mb-2 font-medium text-blue-800">DOT Number</label>
-                    <input 
-                      type="text" 
-                      placeholder="Enter DOT Number" 
+                    <input
+                      name="dotNumber"
+                      value={form.dotNumber}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Enter DOT Number"
                       className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
                     />
                   </div>
@@ -82,12 +146,17 @@ const AddCompany = () => {
                   <div>
                     <label className="block mb-2 font-medium text-blue-800">Time Zone</label>
                     <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Choose</option>
-                        <option>CST</option>
-                        <option>EST</option>
-                        <option>MST</option>
-                        <option>PST</option>
+                      <select
+                        name="timeZone"
+                        value={form.timeZone}
+                        onChange={handleChange}
+                        className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pl-3 pr-8"
+                      >
+                        <option value="">Choose</option>
+                        <option value="CST">CST</option>
+                        <option value="EST">EST</option>
+                        <option value="MST">MST</option>
+                        <option value="PST">PST</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
@@ -98,99 +167,60 @@ const AddCompany = () => {
                   {/* 24H Period Starting Time */}
                   <div>
                     <label className="block mb-2 font-medium text-blue-800">24H Period Starting Time</label>
-                    <input 
-                      type="time" 
-                      value="00:00"
+                    <input
+                      name="periodStart"
+                      value={form.periodStart}
+                      onChange={handleChange}
+                      type="time"
                       className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 text-blue-900"
                     />
                   </div>
                 </div>
-                
-                {/* Address Fields */}
-                <div className="mt-6">
+
+                {/* Address */}
+                <div className="space-y-4">
                   <label className="block mb-2 font-medium text-blue-800">Address</label>
-                  <input 
-                    type="text" 
-                    placeholder="Address" 
-                    className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900 mb-4"
+                  <input
+                    name="address"
+                    value={form.address}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Address"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-blue-400 text-blue-900"
                   />
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>City</option>
-                        <option>Alabama</option>
-                        <option>Alaska</option>
-                        <option>Arizona</option>
-                        <option>Arkansas</option>
-                        <option>California</option>
-                        <option>Connecticut</option>
-                        <option>Delaware</option>
-                        <option>Florida</option>
-                        <option>Georgia</option>
-                        <option>Hawaii</option>
-                        <option>Idhao</option>
-                        <option>Illinios</option>
-                        <option>Indiana</option>
-                        <option>Iowa</option>
-                        <option>Kensas</option>
-                        <option>Kentucky</option>
-                        <option>Louisiana</option>
-                        <option>Maine</option>
-                        <option>Maryland</option>
-                        <option>Masschusetts</option>
-                        <option>Michigan</option>
-                        <option>Minnesota</option>
-                        <option>Mississippi</option>
-                        <option>Montana</option>
-                        <option>Nebraska</option>
-                        <option>Nevada</option>
-                        <option>New Hamsphire</option>
-                        <option>New Jersey</option>
-                        <option>New Mexico</option>
-                        <option>New York</option>
-                        <option>North Carolina</option>
-                        <option>North Carolina</option>
-                        <option>North Dakota</option>
-                        <option>Ohio</option>
-                        <option>Pkhlahoma</option>
-                        <option>Oregon</option>
-                        <option>Pennsylevenia</option>
-                        <option>Rhode Island</option>
-                        <option>South Carolina</option>
-                        <option>South Dakota</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Utha</option>
-                        <option>Vermont</option>
-                        <option>Virginia</option>
-                        <option>Washington</option>
-                        <option>West Virginia</option>
-                        <option>Wisconsin</option>
-                        <option>Wyoming</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                    
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                    
-                    <input 
-                      type="text" 
-                      placeholder="ZIP Code" 
-                      className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
+                    <input
+                      name="city"
+                      value={form.city}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="City"
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                    />
+                    <input
+                      name="state"
+                      value={form.state}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="State"
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                    />
+                    <input
+                      name="country"
+                      value={form.country}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Country"
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                    />
+                    <input
+                      name="zipCode"
+                      value={form.zipCode}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="ZIP Code"
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
                     />
                   </div>
                 </div>
@@ -198,275 +228,260 @@ const AddCompany = () => {
             </div>
 
             {/* Terminal Information */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-blue-200">
+            <div className="bg-white rounded-xl shadow-md border border-blue-200">
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
                 <h2 className="font-medium text-lg text-white">Terminal 1</h2>
               </div>
-              <div className="p-6">
-                {/* Exempt Driver */}
-                <div className="mb-6">
-                  <label className="inline-flex items-center">
-                    <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
-                    <span className="ml-2 text-blue-800">Exempt Driver</span>
-                  </label>
-                </div>
-                
-                {/* Terminal Time Zone */}
-                <div className="mb-6">
-                  <label className="block mb-2 font-medium text-blue-800">Time Zone</label>
-                  <div className="relative">
-                    <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                      <option>Choose</option>
-                        <option>CST</option>
-                        <option>EST</option>
-                        <option>MST</option>
-                        <option>PST</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <ChevronDown className="h-5 w-5 text-blue-500" />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Terminal Address Fields */}
-                <div>
-                  <label className="block mb-2 font-medium text-blue-800">Terminal Address</label>
-                  <input 
-                    type="text" 
-                    placeholder="Address" 
-                    className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900 mb-4"
+              <div className="p-6 space-y-6">
+                <label className="inline-flex items-center">
+                  <input
+                    name="exemptDriver"
+                    checked={form.exemptDriver}
+                    onChange={handleChange}
+                    type="checkbox"
+                    className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
                   />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    
-                    
+                  <span className="ml-2 text-blue-800">Exempt Driver</span>
+                </label>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block mb-2 font-medium text-blue-800">Time Zone</label>
                     <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                         <option>City</option>
-                        <option>Alabama</option>
-                        <option>Alaska</option>
-                        <option>Arizona</option>
-                        <option>Arkansas</option>
-                        <option>California</option>
-                        <option>Connecticut</option>
-                        <option>Delaware</option>
-                        <option>Florida</option>
-                        <option>Georgia</option>
-                        <option>Hawaii</option>
-                        <option>Idhao</option>
-                        <option>Illinios</option>
-                        <option>Indiana</option>
-                        <option>Iowa</option>
-                        <option>Kensas</option>
-                        <option>Kentucky</option>
-                        <option>Louisiana</option>
-                        <option>Maine</option>
-                        <option>Maryland</option>
-                        <option>Masschusetts</option>
-                        <option>Michigan</option>
-                        <option>Minnesota</option>
-                        <option>Mississippi</option>
-                        <option>Montana</option>
-                        <option>Nebraska</option>
-                        <option>Nevada</option>
-                        <option>New Hamsphire</option>
-                        <option>New Jersey</option>
-                        <option>New Mexico</option>
-                        <option>New York</option>
-                        <option>North Carolina</option>
-                        <option>North Carolina</option>
-                        <option>North Dakota</option>
-                        <option>Ohio</option>
-                        <option>Pkhlahoma</option>
-                        <option>Oregon</option>
-                        <option>Pennsylevenia</option>
-                        <option>Rhode Island</option>
-                        <option>South Carolina</option>
-                        <option>South Dakota</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Utha</option>
-                        <option>Vermont</option>
-                        <option>Virginia</option>
-                        <option>Washington</option>
-                        <option>West Virginia</option>
-                        <option>Wisconsin</option>
-                        <option>Wyoming</option>
-                      
+                      <select
+                        name="terminalTimeZone"
+                        value={form.terminalTimeZone}
+                        onChange={handleChange}
+                        className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pl-3 pr-8"
+                      >
+                        <option value="">Choose</option>
+                        <option value="CST">CST</option>
+                        <option value="EST">EST</option>
+                        <option value="MST">MST</option>
+                        <option value="PST">PST</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                         <ChevronDown className="h-5 w-5 text-blue-500" />
                       </div>
                     </div>
-                    
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                    
-                    <input 
-                      type="text" 
-                      placeholder="ZIP Code" 
-                      className="w-full p-3 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-blue-50 placeholder-blue-400 text-blue-900"
-                    />
                   </div>
+
+                  <input
+                    name="terminalAddress"
+                    value={form.terminalAddress}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Terminal Address"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <input
+                    name="terminalCity"
+                    value={form.terminalCity}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="City"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                  />
+                  <input
+                    name="terminalState"
+                    value={form.terminalState}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="State"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                  />
+                  <input
+                    name="terminalCountry"
+                    value={form.terminalCountry}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="Country"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                  />
+                  <input
+                    name="terminalZipCode"
+                    value={form.terminalZipCode}
+                    onChange={handleChange}
+                    type="text"
+                    placeholder="ZIP Code"
+                    className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900"
+                  />
                 </div>
               </div>
             </div>
 
             {/* Compliance Settings */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-blue-200">
+            <div className="bg-white rounded-xl shadow-md border border-blue-200">
               <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
                 <h2 className="font-medium text-lg text-white">Compliance Settings</h2>
               </div>
-              <div className="p-6">
-                {/* Compliance Mode */}
-                <div className="mb-6">
-                  <label className="block mb-2 font-medium text-blue-800">Compliance Mode</label>
-                  <div className="relative">
-                    <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                      <option>ELD</option>
-                      
+              <div className="p-6 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block mb-2 font-medium text-blue-800">Compliance Mode</label>
+                    <select
+                      name="complianceMode"
+                      value={form.complianceMode}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Choose</option>
+                      <option value="ELD">ELD</option>
                     </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <ChevronDown className="h-5 w-5 text-blue-500" />
-                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 font-medium text-blue-800">HOS Rules</label>
+                    <select
+                      name="hosRules"
+                      value={form.hosRules}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Choose</option>
+                      <option value="USA 70hr/8days">USA 70hr/8days</option>
+                      <option value="USA 60hr/7days">USA 60hr/7days</option>
+                      <option value="California 80hr/8days">California 80hr/8days</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 font-medium text-blue-800">Cargo Type</label>
+                    <select
+                      name="cargoType"
+                      value={form.cargoType}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Choose</option>
+                      <option value="Property">Property</option>
+                      <option value="Passenger">Passenger</option>
+                      <option value="Oil & Gas">Oil & Gas</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 font-medium text-blue-800">Restart</label>
+                    <select
+                      name="restartOption"
+                      value={form.restartOption}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Choose</option>
+                      <option value="34-Hour">34-Hour</option>
+                      <option value="24-Hour">24-Hour</option>
+                      <option value="None">None</option>
+                    </select>
                   </div>
                 </div>
-                
-                {/* Default Driver Log Settings */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-medium text-blue-800 mb-4">Default Driver Log Settings</h3>
-                  
-                  {/* Exempt Driver */}
-                  <div className="mb-4">
-                    <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
-                      <span className="ml-2 text-blue-800">Exempt Driver</span>
-                    </label>
-                  </div>
-                  
-                  {/* HOS Rules */}
-                  <div className="mb-4">
-                    <label className="block mb-2 font-medium text-blue-800">HOS Rules</label>
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Choose</option>
-                        <option>USA 70hr/8days</option>
-                        <option>USA 60hr/7days</option>
-                        <option>California 80hr/8days</option>
-                        
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Cargo Type */}
-                  <div className="mb-4">
-                    <label className="block mb-2 font-medium text-blue-800">Cargo Type</label>
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Choose</option>
-                        <option>Property</option>
-                        <option>Passenger</option>
-                        <option>Oil & Gas</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Restart */}
-                  <div className="mb-4">
-                    <label className="block mb-2 font-medium text-blue-800">Restart</label>
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>Choose</option>
-                        <option>34-Hour</option>
-                        <option>24-Hour</option>
-                        <option>None</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Rest Break */}
-                  <div className="mb-4">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
                     <label className="block mb-2 font-medium text-blue-800">Rest Break</label>
-                    <div className="relative">
-                      <select className="w-full p-3 border border-blue-300 rounded-lg appearance-none bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 pl-3 pr-8">
-                        <option>No Rest Break Required</option>
-                        <option>30 Minute Rest Break Required</option>
-                        
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
-                      </div>
-                    </div>
+                    <select
+                      name="restBreakRequirement"
+                      value={form.restBreakRequirement}
+                      onChange={handleChange}
+                      className="w-full p-3 border border-blue-300 rounded-lg bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Choose</option>
+                      <option value="None">No Rest Break Required</option>
+                      <option value="30min">30 Minute Rest Break Required</option>
+                    </select>
                   </div>
-                  
-                  {/* Additional Options */}
+
                   <div className="space-y-3">
                     <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
+                      <input
+                        name="shortHaulException"
+                        checked={form.shortHaulException}
+                        onChange={handleChange}
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                      />
                       <span className="ml-2 text-blue-800">Short-Haul Exception</span>
                     </label>
-                    
                     <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" defaultChecked />
+                      <input
+                        name="allowPersonalUse"
+                        checked={form.allowPersonalUse}
+                        onChange={handleChange}
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                      />
                       <span className="ml-2 text-blue-800">Allow Personal Use</span>
                     </label>
-                    
                     <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" defaultChecked />
+                      <input
+                        name="allowYardMoves"
+                        checked={form.allowYardMoves}
+                        onChange={handleChange}
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                      />
                       <span className="ml-2 text-blue-800">Allow Yard Moves</span>
                     </label>
-                    
                     <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
+                      <input
+                        name="allowSplitSleep"
+                        checked={form.allowSplitSleep}
+                        onChange={handleChange}
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                      />
                       <span className="ml-2 text-blue-800">Allow Split Sleep</span>
-                    </label>
-                  </div>
-                </div>
-                
-                {/* Plan Features */}
-                <div>
-                  <h3 className="text-lg font-medium text-blue-800 mb-4">Plan Features</h3>
-                  
-                  <div className="space-y-3">
-                    <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
-                      <span className="ml-2 text-blue-800">Allow Tracking</span>
-                    </label>
-                    
-                    <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
-                      <span className="ml-2 text-blue-800">Allow GPS Tracking</span>
-                    </label>
-                    
-                    <label className="inline-flex items-center">
-                      <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500" />
-                      <span className="ml-2 text-blue-800">Allow IFTA</span>
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            
+
+            {/* Plan Features */}
+            <div className="bg-white rounded-xl shadow-md border border-blue-200">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4">
+                <h2 className="font-medium text-lg text-white">Plan Features</h2>
+              </div>
+              <div className="p-6 space-y-3">
+                <label className="inline-flex items-center">
+                  <input
+                    name="allowTracking"
+                    checked={form.allowTracking}
+                    onChange={handleChange}
+                    type="checkbox"
+                    className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                  />
+                  <span className="ml-2 text-blue-800">Allow Tracking</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    name="allowGpsTracking"
+                    checked={form.allowGpsTracking}
+                    onChange={handleChange}
+                    type="checkbox"
+                    className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                  />
+                  <span className="ml-2 text-blue-800">Allow GPS Tracking</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    name="allowIfta"
+                    checked={form.allowIfta}
+                    onChange={handleChange}
+                    type="checkbox"
+                    className="form-checkbox h-5 w-5 text-blue-600 rounded border-blue-300 focus:ring-blue-500"
+                  />
+                  <span className="ml-2 text-blue-800">Allow IFTA</span>
+                </label>
+              </div>
+            </div>
+
             {/* Submit Button */}
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg shadow-md transition-colors"
             >
               Submit
@@ -476,6 +491,6 @@ const AddCompany = () => {
       </div>
     </>
   );
-}
+};
 
 export default AddCompany;
