@@ -1,22 +1,30 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Copy, FileText, File, Printer, Settings, Search } from 'lucide-react';
 import { fetchUserFromCookie } from '../../utils/auth';
 
 const ManageCompany = () => {
   const navigate = useNavigate();
-  const [user,setUser]=useState(null);
+  const [user, setUser] = useState(null);
+  const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
     fetchUserFromCookie().then(setUser);
-  }, []);
 
-  // Sample data
-  const companies = [
-    { name: 'Test', dot: '34343454', createdBy: 'gagandeep@xpertlogs', status: 'Active' },
-    { name: 'Test Company', dot: '0000000', createdBy: 'omni', status: 'Active' },
-    // ... other company data
-  ];
+    const fetchCompanies = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/company/getCompanies', { credentials: 'include' });
+
+        const data = await response.json();
+        console.log(data)
+        setCompanies(data);
+      } catch (error) {
+        console.error("Failed to fetch companies:", error);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -32,9 +40,9 @@ const ManageCompany = () => {
               <a href="#" className="text-gray-700 hover:text-blue-600">Refresh</a>
               <div className="flex items-center space-x-2 border border-gray-300 rounded px-2 py-1">
                 {/* <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white">J</div> */}
-                
-            <span className="text-gray-700">{user?.username || "Loading..."}</span>
-            
+
+                <span className="text-gray-700">{user?.username || "Loading..."}</span>
+
                 <ChevronDown className="h-5 w-5 text-gray-500" />
               </div>
             </div>
@@ -54,7 +62,7 @@ const ManageCompany = () => {
         {/* Page Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Manage Company</h1>
-          <button 
+          <button
             onClick={() => navigate('/AddCompany')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
           >
@@ -104,47 +112,41 @@ const ManageCompany = () => {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DOT</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created By</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {companies.map((company, index) => (
-                  <tr 
-                    key={index} 
-                    className="hover:bg-gray-50 cursor-pointer"
-                    onClick={() => navigate('/eachcompany/drivers')}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-medium text-gray-900">{company.name}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">{company.dot}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500">{company.createdBy}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center">
-                        <span className={`h-2 w-2 rounded-full ${company.status === 'Active' ? 'bg-green-500' : 'bg-red-500'} mr-2`}></span>
-                        {company.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-gray-500 hover:text-gray-700">
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <table className="min-w-full table-auto border-collapse">
+  <thead className="bg-gray-100">
+    <tr>
+      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Company Name</th>
+      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">DOT Number</th>
+      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Created By</th>
+      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 border-b">Status</th>
+      <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700 border-b">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {companies.map((company, index) => (
+      <tr
+        key={index}
+        className="hover:bg-gray-50 cursor-pointer transition-colors"
+        onClick={() => navigate(`/dashboard/${company.id}`)}
+      >
+        <td className="px-6 py-4 text-gray-900 border-b">{company.companyname}</td>
+        <td className="px-6 py-4 text-gray-700 border-b">{company.dot_number}</td>
+        <td className="px-6 py-4 text-gray-700 border-b">{company.createdby_username}</td>
+        <td className="px-6 py-4 border-b">
+          <span className="inline-flex items-center">
+            <span className={`h-2 w-2 rounded-full mr-2 ${company.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+            <span className="text-gray-700">{company.status}</span>
+          </span>
+        </td>
+        <td className="px-6 py-4 text-right text-sm text-blue-600 hover:underline border-b">
+          View
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
 
           {/* Card Footer */}
           <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center">

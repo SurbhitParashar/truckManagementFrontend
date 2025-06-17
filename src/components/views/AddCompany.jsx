@@ -6,7 +6,7 @@ const AddCompany = () => {
   // 1. Initialize form state
   const [form, setForm] = useState({
     // General Settings
-    name: '',
+    companyname: '',
     dotNumber: '',
     timeZone: '',
     periodStart: '00:00',
@@ -40,6 +40,8 @@ const AddCompany = () => {
     allowTracking: false,
     allowGpsTracking: false,
     allowIfta: false,
+
+    Status: 'Active',
   });
 
   // 2. Generic onChange for inputs, selects, checkboxes
@@ -55,7 +57,7 @@ const AddCompany = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/addcompany', {
+      const res = await fetch('http://localhost:5000/api/company/addCompany', {
         method: 'POST',
         credentials: 'include',               // send JWT cookie
         headers: { 'Content-Type': 'application/json' },
@@ -64,13 +66,94 @@ const AddCompany = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Submission failed');
       alert('Company created successfully!');
-      // Optionally reset form here:
-      // setForm(/* initial state object as above */);
     } catch (err) {
       console.error(err);
       alert(`Error: ${err.message}`);
     }
   };
+
+   // Export to PDF function
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Company Information', 105, 15, { align: 'center' });
+    
+    // General Settings
+    doc.setFontSize(14);
+    doc.text('General Settings', 14, 25);
+    doc.setFontSize(12);
+    doc.text(`Company Name: ${form.companyname}`, 14, 35);
+    doc.text(`DOT Number: ${form.dotNumber}`, 14, 45);
+    doc.text(`Time Zone: ${form.timeZone}`, 14, 55);
+    doc.text(`24H Period Start: ${form.periodStart}`, 14, 65);
+    doc.text(`Address: ${form.address}, ${form.city}, ${form.state}, ${form.country}, ${form.zipCode}`, 14, 75);
+    
+    // Terminal Information
+    doc.setFontSize(14);
+    doc.text('Terminal Information', 14, 90);
+    doc.setFontSize(12);
+    doc.text(`Exempt Driver: ${form.exemptDriver ? 'Yes' : 'No'}`, 14, 100);
+    doc.text(`Terminal Address: ${form.terminalAddress}, ${form.terminalCity}, ${form.terminalState}, ${form.terminalCountry}, ${form.terminalZipCode}`, 14, 110);
+    
+    // Compliance Settings
+    doc.setFontSize(14);
+    doc.text('Compliance Settings', 14, 125);
+    doc.setFontSize(12);
+    doc.text(`Compliance Mode: ${form.complianceMode}`, 14, 135);
+    doc.text(`HOS Rules: ${form.hosRules}`, 14, 145);
+    doc.text(`Cargo Type: ${form.cargoType}`, 14, 155);
+    doc.text(`Restart Option: ${form.restartOption}`, 14, 165);
+    doc.text(`Rest Break Requirement: ${form.restBreakRequirement}`, 14, 175);
+    doc.text(`Short-Haul Exception: ${form.shortHaulException ? 'Yes' : 'No'}`, 14, 185);
+    
+    // Plan Features
+    doc.setFontSize(14);
+    doc.text('Plan Features', 14, 200);
+    doc.setFontSize(12);
+    doc.text(`Allow Tracking: ${form.allowTracking ? 'Yes' : 'No'}`, 14, 210);
+    doc.text(`Allow GPS Tracking: ${form.allowGpsTracking ? 'Yes' : 'No'}`, 14, 220);
+    doc.text(`Allow IFTA: ${form.allowIfta ? 'Yes' : 'No'}`, 14, 230);
+    
+    // Save the PDF
+    doc.save('Company_Information.pdf');
+  };
+
+  // Export to Excel function
+  const exportToExcel = () => {
+    // Prepare data for Excel
+    const excelData = [
+      ['Section', 'Field', 'Value'],
+      ['General Settings', 'Company Name', form.companyname],
+      ['General Settings', 'DOT Number', form.dotNumber],
+      ['General Settings', 'Time Zone', form.timeZone],
+      ['General Settings', '24H Period Start', form.periodStart],
+      ['General Settings', 'Address', `${form.address}, ${form.city}, ${form.state}, ${form.country}, ${form.zipCode}`],
+      ['Terminal Information', 'Exempt Driver', form.exemptDriver ? 'Yes' : 'No'],
+      ['Terminal Information', 'Terminal Address', `${form.terminalAddress}, ${form.terminalCity}, ${form.terminalState}, ${form.terminalCountry}, ${form.terminalZipCode}`],
+      ['Compliance Settings', 'Compliance Mode', form.complianceMode],
+      ['Compliance Settings', 'HOS Rules', form.hosRules],
+      ['Compliance Settings', 'Cargo Type', form.cargoType],
+      ['Compliance Settings', 'Restart Option', form.restartOption],
+      ['Compliance Settings', 'Rest Break Requirement', form.restBreakRequirement],
+      ['Compliance Settings', 'Short-Haul Exception', form.shortHaulException ? 'Yes' : 'No'],
+      ['Plan Features', 'Allow Tracking', form.allowTracking ? 'Yes' : 'No'],
+      ['Plan Features', 'Allow GPS Tracking', form.allowGpsTracking ? 'Yes' : 'No'],
+      ['Plan Features', 'Allow IFTA', form.allowIfta ? 'Yes' : 'No'],
+    ];
+
+    // Create workbook and worksheet
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Company Information');
+    
+    // Export to Excel file
+    XLSX.writeFile(wb, 'Company_Information.xlsx');
+  };
+
 
   return (
     <>
@@ -120,7 +203,7 @@ const AddCompany = () => {
                   <div>
                     <label className="block mb-2 font-medium text-blue-800">Name</label>
                     <input
-                      name="name"
+                      name="companyname"
                       value={form.name}
                       onChange={handleChange}
                       type="text"
