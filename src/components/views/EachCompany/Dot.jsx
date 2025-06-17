@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { 
+import {
   Menu, FileText, HelpCircle, Smartphone, AlertTriangle, Settings, Truck,
-  ChevronDown, Plus, Home, RefreshCw, Copy, Printer, Columns, ChevronLeft, 
+  ChevronDown, Plus, Home, RefreshCw, Copy, Printer, Columns, ChevronLeft,
   ChevronRight, Trash2, Pencil
 } from 'lucide-react';
 import Navbar from '../../modules/Navbar';
@@ -9,14 +9,14 @@ import Sidebar from '../../modules/Sidebar';
 import { Link, useParams, useLocation } from 'react-router-dom';
 
 const DOT = () => {
-    const {id} = useParams();
+  const { id } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Navbar - fixed at top */}
       <Navbar />
-      
+
       <div className="flex flex-1 overflow-hidden "> {/* pt-16 to account for navbar height */}
         {/* Sidebar - fixed below navbar */}
         <Sidebar />
@@ -37,9 +37,9 @@ const DOT = () => {
             <h1 className="text-2xl font-semibold text-slate-800">Manage Drivers</h1>
             <div className="flex gap-2">
               <Link to={`/dashboard/${id}/DOT/AddDriver`} className="flex items-center text-inherit no-underline w-full">
-            
-            Add Driver
-          </Link>
+
+                Add Driver
+              </Link>
               <button className="px-3 py-2 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700">
                 Home Company
               </button>
@@ -80,22 +80,22 @@ const DOT = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="relative">
-                  <input 
-                    type="text" 
-                    placeholder="Search..." 
+                  <input
+                    type="text"
+                    placeholder="Search..."
                     className="pl-3 pr-4 py-2 rounded border border-slate-300 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
-              
+
               {/* Table */}
-              
-              
+
+
               {/* Table Footer */}
-              
-          </div>
+
+            </div>
           </div>
         </div>
       </div>

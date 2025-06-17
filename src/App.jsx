@@ -11,6 +11,7 @@ import DOT from './components/views/EachCompany/Dot';
 import AddDriver from './components/views/EachCompany/Dot/AddDriver';
 import CompanyManagement from './components/views/EachCompany/CompanyManagement';
 import DeviceManagement from './components/views/EachCompany/DeviceManagement';
+import AddDevice from './components/views/EachCompany/Devices/AddDevices';
 // Add more as needed
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
         <Route path="/dashboard/:id/DOT/AddDriver" element={<AddDriver />} />
         <Route path="/dashboard/:id/CompanyManagement" element={<CompanyManagement />} />
         <Route path="/dashboard/:id/DeviceManagement" element={<DeviceManagement />} />
-        {/* Add additional routes here */}
+        <Route path="/dashboard/:id/Devices/AddDevices" element={<AddDevice />} />
       </Routes>
     </Router>
   );
