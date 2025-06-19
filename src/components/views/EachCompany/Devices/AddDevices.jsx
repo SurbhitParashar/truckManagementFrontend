@@ -2,31 +2,67 @@ import React, { useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import Navbar from '../../../modules/Navbar';
 import Sidebar from '../../../modules/Sidebar';
+import { useRef } from 'react';
 
 const AddDevice = () => {
     const { id } = useParams();
 
-  const [formData, setFormData] = useState({
+  const formRef = useRef();
+  const [deviceData, setDeviceData] = useState({
     serialNumber: '',
-    deviceType: '',
-    deviceMac: '',
-    deviceVersion: '',
-    deviceModel: 'US',
-    status: ''
+    type: '',
+    mac: '',
+    version: '',
+    model: '',
+    status: '',
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setDeviceData(prev => ({
       ...prev,
       [name]: value
     }));
   };
 
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/device/addDevice', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deviceData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+      if (!response.ok) throw new Error(result.message || "Failed to add device");
+
+      alert("Device added successfully");
+
+      
+      formRef.current.reset();
+      
+      setDeviceData({
+        serialNumber: '',
+        type: '',
+        mac: '',
+        version: '',
+        model: '',
+        status: '',
+      });
+
+    } catch (err) {
+      console.error("Add device error:", err.message);
+      alert(`❌ ${err.message}`);
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -58,7 +94,7 @@ const AddDevice = () => {
           </div>
 
           {/* Form Content */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form ref={formRef} onSubmit={handleSubmit} className="p-6 space-y-6">
             {/* Serial Number */}
             <div>
               <label htmlFor="serialNumber" className="block text-sm font-medium text-gray-700 mb-2">
@@ -68,7 +104,7 @@ const AddDevice = () => {
                 type="text"
                 id="serialNumber"
                 name="serialNumber"
-                value={formData.serialNumber}
+                value={setDeviceData.serialNumber}
                 onChange={handleInputChange}
                 placeholder="Device Serial Number"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -84,7 +120,7 @@ const AddDevice = () => {
                 type="text"
                 id="deviceType"
                 name="deviceType"
-                value={formData.deviceType}
+                value={setDeviceData.deviceType}
                 onChange={handleInputChange}
                 placeholder="Device Device Type"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -100,7 +136,7 @@ const AddDevice = () => {
                 type="text"
                 id="deviceMac"
                 name="deviceMac"
-                value={formData.deviceMac}
+                value={setDeviceData.deviceMac}
                 onChange={handleInputChange}
                 placeholder="Device Mac"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -116,7 +152,7 @@ const AddDevice = () => {
                 type="text"
                 id="deviceVersion"
                 name="deviceVersion"
-                value={formData.deviceVersion}
+                value={setDeviceData.deviceVersion}
                 onChange={handleInputChange}
                 placeholder="Device Version"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -132,7 +168,7 @@ const AddDevice = () => {
                 type="text"
                 id="deviceModel"
                 name="deviceModel"
-                value={formData.deviceModel}
+                value={setDeviceData.deviceModel}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -146,7 +182,7 @@ const AddDevice = () => {
               <select
                 id="status"
                 name="status"
-                value={formData.status}
+                value={setDeviceData.status}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-400"
               >

@@ -9,61 +9,61 @@ const ManageCompany = () => {
   const [user, setUser] = useState(null);
   const [companies, setCompanies] = useState([]);
 
- useEffect(() => {
-  fetchUserFromCookie().then(setUser);
+  useEffect(() => {
+    fetchUserFromCookie().then(setUser);
 
-  const fetchCompanies = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/company/getCompanies', { credentials: 'include' });
+    const fetchCompanies = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/company/getCompanies', { credentials: 'include' });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to fetch companies');
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Failed to fetch companies');
+        }
+
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setCompanies(data);
+        } else {
+          console.warn('Data is not an array:', data);
+          setCompanies([]);  // fallback
+        }
+      } catch (error) {
+        console.error("Failed to fetch companies:", error);
+        setCompanies([]);  // ensure it’s an array even if there's an error
       }
+    };
 
-      const data = await response.json();
-
-      if (Array.isArray(data)) {
-        setCompanies(data);
-      } else {
-        console.warn('Data is not an array:', data);
-        setCompanies([]);  // fallback
-      }
-    } catch (error) {
-      console.error("Failed to fetch companies:", error);
-      setCompanies([]);  // ensure it’s an array even if there's an error
-    }
-  };
-
-  fetchCompanies();
-}, []);
+    fetchCompanies();
+  }, []);
 
 
 
   const handleCompanySelect = async (company) => {
-  try {
-    const res = await fetch('http://localhost:5000/api/company/select', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        companyId: company.company_id,          // ✅ must match backend expectation
-        companyName: company.companyname,
-      }),
-    });
+    try {
+      const res = await fetch('http://localhost:5000/api/company/select', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          company_id: company.company_id,
+          companyName: company.companyname,
+        }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Failed to select company');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to select company');
 
-    console.log("✅ Company selected:", data.message);
-    navigate(`/dashboard/${company.id}`);
-  } catch (err) {
-    console.error("Error selecting company:", err.message);
-    alert(`❌ ${err.message}`);
-  }
-};
+      console.log("Company selected:", data.message);
+      navigate(`/dashboard/${company.id}`);
+    } catch (err) {
+      console.error("Error selecting company:", err.message);
+      alert(`❌ ${err.message}`);
+    }
+  };
 
 
 
