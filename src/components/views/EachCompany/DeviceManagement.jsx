@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../../modules/Navbar';
 import Sidebar from '../../modules/Sidebar';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 
 const DeviceManagement = () => {
-  const {id}=useParams()
+  const { id } = useParams()
+  const [devices, setDevices] = useState([]);
+
+  useEffect(() => {
+    async function fetchDevices() {
+      try {
+        const res = await axios.get('http://localhost:5000/api/device/getDevices', {
+          withCredentials: true
+        });
+
+        if (Array.isArray(res.data)) {
+          setDevices(res.data);
+        } else {
+          console.error("Unexpected response format:", res.data);
+          setDevices([]); // fallback to empty array
+        }
+
+      } catch (error) {
+        console.error("Error fetching devices:", error);
+      }
+    }
+
+    fetchDevices();
+  }, []);
+
   return (
 
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -31,14 +57,14 @@ const DeviceManagement = () => {
           <div className="px-6 py-4  flex justify-between items-center">
             <h1 className="text-2xl font-semibold text-slate-800">Devices</h1>
             <div className="flex gap-2">
-              
+
               <Link to={`/dashboard/${id}/Devices/AddDevices`} className="px-3 py-2 rounded bg-green-600 text-white text-sm font-medium hover:bg-green-700">
                 Add Devices
               </Link>
             </div>
           </div>
 
-         
+
 
           {/* Card */}
           <div className="bg-white rounded shadow-sm border border-gray-300 mx-5 mb-5">
@@ -100,7 +126,58 @@ const DeviceManagement = () => {
               <input type="text" className="px-3 py-2 rounded border border-gray-300 text-sm ml-auto w-52 focus:outline-none focus:border-blue-700 focus:ring-2 focus:ring-blue-100" placeholder="Search..." />
             </div>
 
-            
+            {/* table  */}
+            <div className="bg-white rounded-xl shadow-md border border-gray-300 mx-5 mb-5 p-5 overflow-x-auto">
+              <table className="min-w-full border-separate border-spacing-0 text-sm text-left text-gray-800">
+                <thead className="bg-gray-100 text-xs uppercase text-gray-600 border-b border-gray-300">
+                  <tr>
+                    <th className="border border-gray-300 px-4 py-3">#</th>
+                    <th className="border border-gray-300 px-4 py-3">Serial Number</th>
+                    <th className="border border-gray-300 px-4 py-3">Version</th>
+                    <th className="border border-gray-300 px-4 py-3">Model</th>
+                    <th className="border border-gray-300 px-4 py-3">Status</th>
+                    <th className="border border-gray-300 px-4 py-3">Created By</th>
+                    <th className="border border-gray-300 px-4 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {devices.map((device, index) => (
+                    <tr key={device.id || index} className="odd:bg-white even:bg-gray-50 transition-colors hover:bg-blue-50">
+                      <td className="border border-gray-300 px-4 py-3 font-medium">{index + 1}</td>
+                      <td className="border border-gray-300 px-4 py-3">{device.serial_number}</td>
+                      <td className="border border-gray-300 px-4 py-3">{device.device_version}</td>
+                      <td className="border border-gray-300 px-4 py-3">{device.device_model}</td>
+                      <td className="border border-gray-300 px-4 py-3">
+                        <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${device.status === 'active' ? 'bg-green-100 text-green-700' :
+                          device.status === 'inactive' ? 'bg-red-100 text-red-700' :
+                            'bg-yellow-100 text-yellow-700'
+                          }`}>
+                          {device.status}
+                        </span>
+                      </td>
+                      <td className="border border-gray-300 px-4 py-3">{device.addedby_username}</td>
+                      <td className="border border-gray-300 px-4 py-3">
+                        <button
+                          title="Edit Device"
+                          className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-xs font-medium px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded-md transition"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2l-6 6H9v-2z" />
+                          </svg>
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {devices.length === 0 && (
+                <p className="text-gray-500 mt-4 text-center">No devices found for this company.</p>
+              )}
+            </div>
           </div>
         </main>
       </div>
