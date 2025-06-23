@@ -8,10 +8,13 @@ import AddCompany from './components/views/AddCompany';
 import Dashboard from './components/views/EachCompany/Dashboard';
 import UnidentifiedEvents from './components/views/EachCompany/UnidentifiedEvents';
 import DOT from './components/views/EachCompany/Dot';
-import AddDriver from './components/views/EachCompany/Dot/AddDriver';
+import AddDriver from './components/views/EachCompany/CompanyManagement/driverManagement/AddDriver';
 import CompanyManagement from './components/views/EachCompany/CompanyManagement';
 import DeviceManagement from './components/views/EachCompany/DeviceManagement';
 import AddDevice from './components/views/EachCompany/Devices/AddDevices';
+import VehicleManagement from './components/views/EachCompany/CompanyManagement/vehicleManagement/VehicleManagement';
+import VehicleForm from './components/views/EachCompany/CompanyManagement/vehicleManagement/AddVehicle';
+import DriverManagement from './components/views/EachCompany/CompanyManagement/driverManagement/DriverManagement';
 // Add more as needed
 
 function App() {
@@ -24,10 +27,13 @@ function App() {
         <Route path="/dashboard/:id" element={<Dashboard />} />
         <Route path="/dashboard/:id/UnidentifiedEvents" element={<UnidentifiedEvents />} />
         <Route path="/dashboard/:id/DOT" element={<DOT />} />
-        <Route path="/dashboard/:id/DOT/AddDriver" element={<AddDriver />} />
         <Route path="/dashboard/:id/CompanyManagement" element={<CompanyManagement />} />
         <Route path="/dashboard/:id/DeviceManagement" element={<DeviceManagement />} />
         <Route path="/dashboard/:id/Devices/AddDevices" element={<AddDevice />} />
+        <Route path="/dashboard/:id/Manage/VehicleManagement" element={<VehicleManagement />} />
+        <Route path="/dashboard/:id/Manage/VehicleManagement/AddVehicle" element={<VehicleForm />} />
+        <Route path="/dashboard/:id/Manage/VehicleManagement/DriverManagement" element={<DriverManagement />} />
+        <Route path="/dashboard/:id/Manage/VehicleManagement/AddDriver" element={<AddDriver />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Phone, CreditCard, Lock, MapPin, Truck, Clock, Package, Home, Car } from 'lucide-react';
-import Navbar from '../../../modules/Navbar';
-import Sidebar from '../../../modules/Sidebar';
+import Navbar from '../../../../modules/Navbar';
+import Sidebar from '../../../../modules/Sidebar';
 
 export default function DriverForm() {
   const [formData, setFormData] = useState({
@@ -46,13 +46,13 @@ export default function DriverForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white ">
         <Navbar/>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Sidebar />
         {/* Header */}
-        <div className="bg-white shadow-lg rounded-t-xl border-t-4 border-blue-600 p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
+        <div className="bg-white shadow-lg rounded-t-xl border-t-4 border-blue-600 p-6 mb-6 mt-20">
+          <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3 ">
             <User className="text-blue-600" size={32} />
             Driver Registration Form
           </h1>

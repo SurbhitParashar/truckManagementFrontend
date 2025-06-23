@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import Navbar from '../../modules/Navbar';
 import Sidebar from '../../modules/Sidebar';
+import { Link,useParams } from 'react-router-dom';
 
 const CompanyManagement = () => {
+
+  const {id}= useParams();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -119,15 +122,15 @@ const CompanyManagement = () => {
                       <button className="px-3 py-1.5 bg-blue-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-edit mr-1"></i> Edit
                       </button>
-                      <button className="px-3 py-1.5 bg-green-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
+                      <Link to={`/dashboard/${id}/Manage/VehicleManagement/DriverManagement`} className="px-3 py-1.5 bg-green-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-user-tie mr-1"></i> Driver
-                      </button>
+                      </Link>
                       <button className="px-3 py-1.5 bg-yellow-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-user mr-1"></i> Portal User
                       </button>
-                      <button className="px-3 py-1.5 bg-blue-500 text-white rounded border-none text-xs font-medium inline-flex items-center">
+                      <Link to={`/dashboard/${id}/Manage/VehicleManagement`} className="px-3 py-1.5 bg-blue-500 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-truck mr-1"></i> Vehicle
-                      </button>
+                      </Link>
                       <button className="px-3 py-1.5 bg-red-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-desktop mr-1"></i> Terminal
                       </button>
