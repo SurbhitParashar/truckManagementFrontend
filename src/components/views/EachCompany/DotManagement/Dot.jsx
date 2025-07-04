@@ -8,8 +8,8 @@ import {
   Columns,
   ChevronDown
 } from 'lucide-react';
-import Navbar from '../../modules/Navbar';
-import Sidebar from '../../modules/Sidebar';
+import Navbar from '../../../modules/Navbar';
+import Sidebar from '../../../modules/Sidebar';
 import axios from 'axios';
 
 const Drivers = () => {

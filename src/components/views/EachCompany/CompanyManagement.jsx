@@ -3,6 +3,7 @@ import Navbar from '../../modules/Navbar';
 import Sidebar from '../../modules/Sidebar';
 import { Link,useParams } from 'react-router-dom';
 
+
 const CompanyManagement = () => {
 
   const {id}= useParams();
@@ -15,12 +16,12 @@ const CompanyManagement = () => {
   return (
     <div className="flex min-h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}
-      <Sidebar collapsed={sidebarCollapsed} />
+      <Sidebar />
       
       {/* Main Content */}
       <div className={`flex-1 overflow-auto flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-60'}`}>
         {/* Navbar */}
-        <Navbar toggleSidebar={toggleSidebar} />
+        <Navbar />
         
         {/* Rest of your content remains the same */}
         <div className="mt-16">
@@ -131,9 +132,9 @@ const CompanyManagement = () => {
                       <Link to={`/dashboard/${id}/Manage/VehicleManagement`} className="px-3 py-1.5 bg-blue-500 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-truck mr-1"></i> Vehicle
                       </Link>
-                      <button className="px-3 py-1.5 bg-red-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
+                      <Link to={`/dashboard/${id}/Manage/TerminalManagement`} className="px-3 py-1.5 bg-red-600 text-white rounded border-none text-xs font-medium inline-flex items-center">
                         <i className="fas fa-desktop mr-1"></i> Terminal
-                      </button>
+                      </Link>
                     </div>
                   </td>
                 </tr>

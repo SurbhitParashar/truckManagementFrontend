@@ -44,7 +44,7 @@ const Sidebar = ({ collapsed }) => {
         <li className={`px-4 py-3.5 flex items-center transition-all text-sm 
             ${isActive('Errors') ? "bg-gray-700 border-l-blue-600 font-medium" : "hover:bg-gray-700 hover:border-l-blue-600"}
             border-l-3 border-transparent cursor-pointer`}>
-          <Link to={`/dashboard/${id}/Errors`} className="flex items-center text-inherit no-underline w-full">
+          <Link to={`/dashboard/${id}/ErrorsManagement`} className="flex items-center text-inherit no-underline w-full">
             <span className={`${collapsed ? 'mx-auto' : 'mr-3'} opacity-80 w-5 text-center`}>
               <AlertTriangle size={16} />
             </span>

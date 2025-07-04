@@ -85,94 +85,11 @@ const UnidentifiedEvents = () => {
               </div>
               
               {/* Table */}
-              <div className="flex-1 overflow-auto">
-                <table className="min-w-full divide-y divide-slate-200">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">ID</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-12">
-                        <input type="checkbox" className="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Time</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vehicle</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Event</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Odometer (MI)</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Engine Hours</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Location</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Notes</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-slate-200">
-                    <tr className="hover:bg-slate-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">1</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <input type="checkbox" className="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">15-04-2025 22:17:45</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">33456</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">ON DUTY</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">1</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">6467</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">72.199996948242</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">5313mi SSW from Bethel, AK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900"></td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                        <div className="flex gap-1">
-                          <button className="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
-                            <Plus className="w-4 h-4" />
-                          </button>
-                          <button className="w-8 h-8 rounded bg-red-600 text-white flex items-center justify-center hover:bg-red-700">
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">2</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <input type="checkbox" className="rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">26-04-2025 05:30:59</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">12</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">ON DUTY</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">1</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">6467</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">72.199996948242</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">5316mi SSW from Bethel, AK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900"></td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
-                        <div className="flex gap-1">
-                          <button className="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
-                            <Plus className="w-4 h-4" />
-                          </button>
-                          <button className="w-8 h-8 rounded bg-red-600 text-white flex items-center justify-center hover:bg-red-700">
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+             
               
               {/* Table Footer */}
-              <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-                <div className="text-sm text-slate-600">
-                  Showing <span className="font-medium">1</span> to <span className="font-medium">2</span> of <span className="font-medium">2</span> results
-                </div>
-                <div className="flex gap-2">
-                  <button className="px-3 py-1 rounded border border-slate-200 bg-white text-slate-700 text-sm flex items-center hover:bg-slate-50 disabled:opacity-50" disabled>
-                    <ChevronLeft className="w-4 h-4 mr-1" />
-                    Previous
-                  </button>
-                  <button className="px-3 py-1 rounded border border-slate-200 bg-white text-slate-700 text-sm flex items-center hover:bg-slate-50 disabled:opacity-50" disabled>
-                    Next
-                    <ChevronRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
-              </div>
+             
+              
             </div>
           </div>
         </div>

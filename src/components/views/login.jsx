@@ -39,7 +39,7 @@ const Login = () => {
             <div className="bg-white rounded-full p-4 shadow-lg mb-4">
               <Truck className="text-blue-700 w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-bold text-white tracking-wide">MyLOGS</h1>
+            <h1 className="text-3xl font-bold text-white tracking-wide">HighwayIQ</h1>
             <p className="text-blue-100 mt-1 text-sm">Truck Driver Management System</p>
           </div>
         </div>
@@ -134,7 +134,7 @@ const Login = () => {
         {/* Footer */}
         <div className="bg-blue-50 px-6 py-4 text-center">
           <p className="text-xs text-blue-600">
-            © {new Date().getFullYear()} MyLOGS — All rights reserved.
+            © {new Date().getFullYear()} HighwayIQ — All rights reserved.
           </p>
         </div>
       </div>
