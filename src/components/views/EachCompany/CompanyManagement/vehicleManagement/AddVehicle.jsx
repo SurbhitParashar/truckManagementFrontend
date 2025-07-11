@@ -4,24 +4,22 @@ import Navbar from '../../../../modules/Navbar';
 import Sidebar from '../../../../modules/Sidebar';
 import axios from 'axios';
 
-const VehicleForm=()=> {
+const VehicleForm = () => {
     const [devices, setDevices] = useState([]);
 
     useEffect(() => {
         async function fetchDevices() {
             try {
-                const res = await axios.get('http://localhost:5000/api/device/getDevices', {
+                const res = await axios.get('http://localhost:5000/api/device/getUnlinkedDevices', {
                     withCredentials: true
                 });
 
-                console.log(res.data);
                 if (Array.isArray(res.data)) {
                     setDevices(res.data);
                 } else {
                     console.error("Unexpected response format:", res.data);
-                    setDevices([]); // fallback to empty array
+                    setDevices([]);
                 }
-
             } catch (error) {
                 console.error("Error fetching devices:", error);
             }
@@ -29,6 +27,8 @@ const VehicleForm=()=> {
 
         fetchDevices();
     }, []);
+
+    // console.log(devices)
 
 
     const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ const VehicleForm=()=> {
         vin: '',
         fuel: '',
         eld: 'Heavy Duty',
-        device: '',
+        device_id: '',
         licensePlate: '',
         country: 'United States',
         plateNumber: '',
@@ -229,19 +229,16 @@ const VehicleForm=()=> {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">Select Device</label>
-                                <select
-                                    name="device"
-                                    value={formData.device}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                >
-                                    <option value="">Select</option>
+
+                                <select name="device_id" value={formData.device_id} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                    <option value="">Select a device</option>
                                     {devices.map((device) => (
-                                        <option key={device.id} value={device.serial_number}>
-                                            {device.serial_number} - {device.device_model}
+                                        <option key={device.id} value={device.id}>
+                                            {device.serial_number} ({device.device_model})
                                         </option>
                                     ))}
                                 </select>
+
                             </div>
 
                         </div>

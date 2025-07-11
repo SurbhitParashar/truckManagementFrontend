@@ -3,6 +3,8 @@ import { ChevronDown, MapPin, Clock, Globe, Building, Hash, Save, ArrowLeft } fr
 import Navbar from '../../../../modules/Navbar';
 import Sidebar from '../../../../modules/Sidebar';
 import axios from 'axios';
+import AddressAutocomplete from '../../../../modules/AddressAutocomplete';
+
 
 const AddTerminalForm = () => {
     const [formData, setFormData] = useState({
@@ -60,7 +62,11 @@ const AddTerminalForm = () => {
         if (!formData.city.trim()) newErrors.city = 'City is required';
         if (!formData.state) newErrors.state = 'State is required';
         if (!formData.country) newErrors.country = 'Country is required';
-        if (!formData.address.trim()) newErrors.address = 'Address is required';
+        if (!formData.address.trim()) {
+            newErrors.address = 'Address is required';
+        } else if (!isValidAddressSelected) {
+            newErrors.address = 'Please select a valid address from suggestions';
+        }
         if (!formData.addressPin.trim()) newErrors.addressPin = 'Address PIN is required';
         else if (!/^\d{5,6}$/.test(formData.addressPin)) newErrors.addressPin = 'PIN must be 5-6 digits';
 
@@ -202,15 +208,12 @@ const AddTerminalForm = () => {
                                 <MapPin className="inline w-4 h-4 mr-2" />
                                 Address *
                             </label>
-                            <textarea
-                                value={formData.address}
-                                onChange={(e) => handleInputChange('address', e.target.value)}
-                                placeholder="Enter complete terminal address"
-                                rows={3}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${errors.address ? 'border-red-500' : 'border-gray-300'
-                                    }`}
+                            <AddressAutocomplete
+                                formData={formData}
+                                setFormData={setFormData}
+                                errors={errors}
+                                setErrors={setErrors}
                             />
-                            {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
                         </div>
 
                         {/* Address PIN */}
