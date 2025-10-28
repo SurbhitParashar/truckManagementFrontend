@@ -1,3 +1,4 @@
+// src/components/views/EachCompany/Drivers.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -14,7 +15,7 @@ import axios from 'axios';
 
 const Drivers = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // company id from route
   const [loading, setLoading] = useState(true);
   const [drivers, setDrivers] = useState([]);
 
@@ -24,7 +25,8 @@ const Drivers = () => {
         const res = await axios.get('http://localhost:5000/api/driver/getDrivers', {
           withCredentials: true,
         });
-        setDrivers(res.data);
+        // res.data expected to be an array of driver objects
+        setDrivers(res.data || []);
       } catch (error) {
         console.error("Error fetching drivers:", error.response?.data || error.message);
       } finally {
@@ -34,6 +36,9 @@ const Drivers = () => {
 
     fetchDrivers();
   }, []);
+  
+
+  if (loading) return <div>Loading drivers...</div>;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -54,11 +59,10 @@ const Drivers = () => {
             {/* Toolbar */}
             <div className="p-3.5 border-b border-gray-200 flex items-center flex-wrap gap-2">
               {[
-                { icon: Copy, label: "Copy" },
-                { icon: FileTextIcon, label: "CSV" },
-                { icon: FileTextIcon, label: "Excel" },
-                { icon: File, label: "PDF" },
-                { icon: Printer, label: "Print" }
+                { icon: Copy, label: 'Copy' },
+                { icon: File, label: 'Export' },
+                { icon: FileTextIcon, label: 'Report' },
+                { icon: Printer, label: 'Print' }
               ].map(({ icon: Icon, label }) => (
                 <button key={label} className="px-3 py-1.5 rounded border border-gray-300 bg-white text-gray-800 text-sm font-medium flex items-center hover:bg-gray-50">
                   <Icon size={14} className="mr-1" />
@@ -98,7 +102,8 @@ const Drivers = () => {
                   {drivers.map((driver) => (
                     <tr
                       key={driver.id}
-                      className="divide-x divide-slate-300 hover:bg-slate-50 transition"
+                      className="divide-x divide-slate-300 hover:bg-slate-50 transition cursor-pointer"
+                      onClick={() => navigate(`/dashboard/${id}/LogBook/Summary/${driver.id}`)}
                     >
                       <td className="px-4 py-3">{driver.first_name} {driver.last_name}</td>
                       <td className="px-4 py-3">{driver.added_by_company_name}</td>

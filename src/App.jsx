@@ -18,6 +18,9 @@ import DriverManagement from './components/views/EachCompany/CompanyManagement/d
 import TerminalDashboard from './components/views/EachCompany/CompanyManagement/terminalManagement/TerminalManagement';
 import AddTerminalForm from './components/views/EachCompany/CompanyManagement/terminalManagement/AddTerminal';
 import ErrorManagement from './components/views/EachCompany/ErrorsManagement';
+
+import DriverLogbook from './components/views/EachCompany/LogBook/DriverLogbook';
+import LogPageSummary from './components/views/EachCompany/LogBook/LogBookSummary';
 // Add more as needed
 
 function App() {
@@ -40,6 +43,10 @@ function App() {
         <Route path="/dashboard/:id/Manage/TerminalManagement" element={<TerminalDashboard />} />
         <Route path="/dashboard/:id/Manage/TerminalManagement/AddTerminal" element={<AddTerminalForm />} />
         <Route path="/dashboard/:id/ErrorsManagement" element={<ErrorManagement />} />
+        <Route path="/dashboard/:id/LogBook/Summary/:driverId" element={<LogPageSummary />} />
+        <Route path="/dashboard/:id/LogBook/DriverLogbook/:driverId" element={<DriverLogbook />} />
+        
+
       </Routes>
     </Router>
   );
