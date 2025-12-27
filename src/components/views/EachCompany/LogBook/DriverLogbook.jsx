@@ -213,7 +213,8 @@ function deriveHourlyFromEventsClient(events = [], dateStr) {
         end_time: rep.event_time,
         odometer: rep.odometer,
         engine_hours: rep.engineHours ?? rep.engine_hours,
-        location: rep.location
+        location: rep.location,
+        origin: rep.origin || rep.origin === 0 ? rep.origin : (rep.mode || 'automatic')
       });
     }
   }

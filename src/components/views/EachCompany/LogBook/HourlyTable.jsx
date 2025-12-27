@@ -9,6 +9,17 @@ export default function HourlyTable({ hourlySamples = [], events = [] }) {
     hourlySamples :
     buildHourlyFallbackFromEvents(events);
 
+    const rowsWithDiff = rows.map((r, i) => {
+  const prev = rows[i - 1];
+  const diff =
+    prev && r.odometer != null && prev.odometer != null
+      ? r.odometer - prev.odometer
+      : "-";
+
+  return { ...r, odoDiff: diff };
+});
+
+
   return (
     <div className="bg-white rounded-lg shadow-md p-5 mb-8 overflow-x-auto">
       <h3 className="text-lg font-semibold text-gray-800 mb-3">Hourly Status</h3>
@@ -21,7 +32,9 @@ export default function HourlyTable({ hourlySamples = [], events = [] }) {
             <th className="px-3 py-2 text-left font-semibold">To</th>
             <th className="px-3 py-2 text-left font-semibold">Odometer</th>
             <th className="px-3 py-2 text-left font-semibold">Engine Hours</th>
+            <th className="px-3 py-2 text-left font-semibold">Odometer Diff</th>
             <th className="px-3 py-2 text-left font-semibold">Location</th>
+            <th className="px-3 py-2 text-left font-semibold">Origin</th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +48,11 @@ export default function HourlyTable({ hourlySamples = [], events = [] }) {
               <td className="px-3 py-2">{r.end_time ? new Date(r.end_time).toLocaleTimeString() : '-'}</td>
               <td className="px-3 py-2">{r.odometer ?? '-'}</td>
               <td className="px-3 py-2">{r.engine_hours ?? r.engineHours ?? '-'}</td>
+              <td className="px-3 py-2 font-semibold text-blue-700">
+                  {r.odoDiff}
+                </td>
               <td className="px-3 py-2">{r.location ?? '-'}</td>
+              <td className="px-3 py-2">{r.origin ?? '-'}</td>
             </tr>
           ))}
         </tbody>
